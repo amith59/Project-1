@@ -1,0 +1,100 @@
+-1 create two ec2-instance one of jenkins/ansible
+-2 second for docker
+-3 then go to ansible and create the connection between one instance two another
+-4 then if the connection is established then go to the docker in second machnine
+
+-steps for connection ansible to docker 
+-1 sudo amazon-linux-extras install epel
+-2 sudo -i
+-3 yum update -y
+-4 yum install ansible -y
+-5 yum install git python python-devel python-pip openssl ansible
+-6 ansible --version
+-7 cd /etc/ansible
+-8 vi ansible.cfg
+uncomment the following:
+		inventory
+		sudo_user
+-9 vi hosts
+-10 [AppServers]
+	private-ip of node/child
+-11 passwd root
+-12 ssh-keygen
+-13 ssh-copy-id ansibleadm@192.168.40.129(client nodeip)
+-14 then go to the node machine
+-15 passwd root
+-16 vim /etc/ssh/sshd_config
+-17 uncomment
+  PermitRootLogin yes
+  (default PasswordAuthentication is 'no')
+ PasswordAuthentication yes
+(save the above changes :wq)
+
+-18 restart sshd
+
+-19 no again go to master node and 
+-20 ssh-copy-id ansibleadm@192.168.40.129(client nodeip)
+-21 if connected then install docker there 
+================================================================================
+
+steps for docker installation 
+
+-1 yum update -y
+-2 yum install docker -y
+-3 docker version
+-4 systemctl start docker
+-5 now install tomact in docker container'
+-6 docker run -dt -p 8082:8080 tomcat 
+-7 docker exec -it name/id of container /bin/bash
+-8 when go to the tomact container
+-9 now go to webapps.dist folder and paste that command
+-10 /usr/local/tomcat/webapps.dist# cp -R * ../webapps/
+-11 then cd ..   and check the tomcat is ruuning or no if running then 
+-12 go to the conf folder and add the user in tomcatusers.xml
+-13 after adding user check it works 
+-14 then go use this command find / -name context.xml
+-15 comment the hostmanager and manager valve part 
+-16 then check ur going in or not
+===============================================================================
+steps for jenkin installation within the ansible server or create new server 
+
+sudo yum update –y
+
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+
+sudo yum upgrade
+
+sudo yum install java-17-amazon-corretto -y
+
+
+
+sudo yum install jenkins -y
+
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+
+sudo systemctl status jenkins
+=========================================================================
+
+
+
+for creating connection to jenkin to tomact
+
+-1 we have to installed plugin name deploy to container
+-2 create a  free style job for particular project 
+-3 fetch from git-hub repo projetc
+-4 check war file is also comming with it 
+-5 then go to configure and go to post build method 
+-6 and check deploy to container plugin
+-7 click there and WAR/EAR files
+-8 put with in **/*.war
+-9 Context path we have to give the name for accessing the website
+-9 Containers put the whatever user created in tomcat user we put here
+-10 Tomcat URL
+-11 put the real time url link where the tomact running along with the 
+-12 port no
+
+===============================================================================
